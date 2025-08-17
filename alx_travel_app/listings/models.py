@@ -72,3 +72,23 @@ class Review(models.Model):
 
     def __str__(self):
         return f"({self.booking.listing.listing_name}): {self.author} - {self.review_title}"
+    
+
+class Payment(models.Model):
+    """
+    Modelfor everything relating to payment data
+    """
+    payer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="payments")
+    payment_status = models.CharField(max_length=10, choices=[
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ], default='pending')
+    transaction_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
+    booking_reference = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.booking_reference} by {self.payer.username} - {self.payment_status}"

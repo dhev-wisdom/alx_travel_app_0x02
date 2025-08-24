@@ -76,7 +76,7 @@ class Review(models.Model):
 
 class Payment(models.Model):
     """
-    Modelfor everything relating to payment data
+    Model for everything relating to payment data
     """
     payer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")
     amount = models.DecimalField(max_digits=8, decimal_places=2)
